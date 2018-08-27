@@ -84,12 +84,14 @@ g3 = ggplot(trcc2[which(!is.na(trcc2$value) & trcc2$L1 == "exposures"), ], aes(x
       xlab("Signature") +
       ylab("Contribution") +
       scale_x_discrete(labels = sort(uqspltrcc)) +
+      scale_y_continuous(limits = c(0.0, 0.7)) +
       ggtitle("tRCC Signature Contributions")
 g4 = ggplot(kirc2[which(!is.na(kirc2$value) & kirc2$L1 == "exposures"), ], aes(x = Var1, y = value)) +
       geom_boxplot() +
       xlab("Signature") +
       ylab("Contribution") +
       scale_x_discrete(labels = as.character(1:30)) +
+      scale_y_continuous(limits = c(0.0, 0.7))
       ggtitle("KIRC Signature Contributions")
 
 library(gridExtra)
