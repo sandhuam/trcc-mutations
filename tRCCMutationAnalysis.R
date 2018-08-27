@@ -43,18 +43,27 @@ for(i in 1:416){
   }
 }
 
-#test statistical significance using mean cosine similarity
+#test statistical significance
 cosineSim <- function(x, y){
   cos_mat <- (t(x)%*%y)/(sqrt((rowSums(x^2) %>% as.numeric() %>% t()) %*% (rowSums(y^2) %>% as.numeric())))[1,1]
   return(rowMeans(cos_mat))
 }
 mean_cos = cosineSim(trcc_exposures$exposures, kirc_exposures$exposures)
 
+tmat = numeric()
+for (i in 1:30){
+  tmat = c(tmat, t.test(trcc_exposures$exposures[i, ], kirc_exposures$exposures[i, ])$p.value)
+}
+
+umat = numeric()
+for (i in 1:30){
+  umat = c(umat, wilcox.test(trcc_exposures$exposures[i, ], kirc_exposures$exposures[i, ])$p.value)
+}
 # trcc3 = melt(trcc_exposures$exposures, id.vars = 30)
 # kirc3 = melt(kirc_exposures$exposures, id.vars = 30)
 # utest = wilcox.test(x = trcc3$value, y = kirc3$value)
 
-#plot - do this in new window or click zoom - the default r window might remain blank
+#plot data - do this in new window or click zoom - the default r window might remain blank
 library(reshape2)
 trcc2 = melt(temp, id.vars = 30)
 kirc2 = melt(temp2, id.vars = 30)
@@ -96,3 +105,19 @@ g4 = ggplot(kirc2[which(!is.na(kirc2$value) & kirc2$L1 == "exposures"), ], aes(x
 
 library(gridExtra)
 grid.arrange(g1, g3, g2, g4, nrow = 2)
+
+#plot t- and u-tests
+tmat2 = data.frame(tmat, signature = 1:30)
+ggplot(tmat2, aes(x = signature, y = 1 - tmat, fill = "magenta")) +
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = 1:30) +
+  theme_bw() +
+  geom_hline(yintercept = 0.95, linetype = "dashed", color = "blue") +
+  guides(fill = F)
+umat2 = data.frame(umat, signature = 1:30)
+ggplot(umat2, aes(x = signature, y = 1 - umat, fill = "magenta")) +
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = 1:30) +
+  theme_bw() +
+  geom_hline(yintercept = 0.95, linetype = "dashed", color = "blue") +
+  guides(fill = F)
