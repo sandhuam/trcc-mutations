@@ -108,16 +108,16 @@ grid.arrange(g1, g3, g2, g4, nrow = 2)
 
 #plot t- and u-tests
 tmat2 = data.frame(tmat, signature = 1:30)
-ggplot(tmat2, aes(x = signature, y = 1 - tmat, fill = "magenta")) +
+ggplot(tmat2, aes(x = signature, y = -log10(tmat), fill = "magenta")) +
   geom_bar(stat = "identity") +
   scale_x_continuous(breaks = 1:30) +
   theme_bw() +
-  geom_hline(yintercept = 0.95, linetype = "dashed", color = "blue") +
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "blue") +
   guides(fill = F)
 umat2 = data.frame(umat, signature = 1:30)
-ggplot(umat2, aes(x = signature, y = 1 - umat, fill = "magenta")) +
+ggplot(umat2, aes(x = signature, y = -log10(umat), fill = "magenta")) +
   geom_bar(stat = "identity") +
   scale_x_continuous(breaks = 1:30) +
   theme_bw() +
-  geom_hline(yintercept = 0.95, linetype = "dashed", color = "blue") +
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "blue") +
   guides(fill = F)
